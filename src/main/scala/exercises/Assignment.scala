@@ -155,11 +155,12 @@ object Assignment extends App {
 
         // Print the matching rows as a report
         if (matchingRows.nonEmpty) {
-          println("Titles in " + lang + " with avg_rating greater than " + userReview + ":")
+          println("Titles in " + lang + " with avg_rating greater than " + userReview + "in descending order:")
           println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-          matchingRows.sorted.foreach(row => {
+          matchingRows.sortBy(_("avg_vote").toDouble).reverse.foreach(row => {
             println(row("title") + " (" + row("avg_vote") + ")")
           })
+
         } else {
           println("No movie titles in " + lang + " with rating greater than " + userReview + " were found.")
         }
@@ -193,9 +194,12 @@ object Assignment extends App {
         if (matchingRows.nonEmpty) {
           println("Titles in " + givenCountry + " in year " + givenYear + ":")
           println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-          matchingRows.sorted.foreach(row => {
+          matchingRows.sortBy(_("budget").filter(_.isDigit).toDouble).reverse.foreach(row => {
             println(row("title") + " (" + row("country") + ")" + " (" + row("year") + ")" + " (" + row("budget") + ")")
           })
+          println()
+          println("Highest budget movie in " + givenCountry + " in the year "+givenYear + " movie title: "+matchingRows.sortBy(_("budget").filter(_.isDigit).toDouble).reverse(0).get("title"))
+
         } else {
           println("No movie titles of " + givenCountry + " in year " + givenYear + " were found.")
         }
@@ -211,7 +215,7 @@ object Assignment extends App {
         val matchingRows = rows.filter(row => {
           val language = row.getOrElse("language", "")
           val budget = row.getOrElse("budget", "")
-          if (language.contains(lang)) {
+          if (language.nonEmpty) {
 
             if (budget.nonEmpty) {
 
@@ -227,12 +231,15 @@ object Assignment extends App {
 
         // Print the matching rows as a report
         if (matchingRows.nonEmpty) {
-          println("Titles in language " + lang + " in the budget range " + startBudget + " to " + endBudget + ":")
+          println("Titles in the budget range " + startBudget + " to " + endBudget + ":")
           println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-          matchingRows.foreach(row => {
-            println(row("language") + " (" + row("title") + ")" + " (" + row("budget") + ")")
+         matchingRows.groupBy(_("language"))
+            .foreach(row => {
+              println("Language: " + row._1 +" and No. of movie titles: "+ row._2.size)
+//            println(row("language") ++" (" + row("title") + ")" + " (" + row("budget") + ")")
           })
-          println("Language: "+ lang +" "+"Count:"+matchingRows.size)
+          println()
+          println("Total Count:"+matchingRows.size)
         } else {
           println("No titles in " + lang + " in the budget range " + startBudget + " to " + endBudget + " were found.")
         }
@@ -265,11 +272,13 @@ object Assignment extends App {
 
         // Print the matching rows as a report
         if (matchingRows.nonEmpty) {
-          println("Titles in " + lang + " with avg_rating greater than " + minmVote + ":")
+          println("Titles in " + lang + " with avg_rating greater than " + minmVote + " and in reverse order of duration:")
           println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-          matchingRows.sorted.foreach(row => {
+          matchingRows.sortBy(_("duration").toDouble).reverse.foreach(row => {
             println(row("title") +  " (" + row("language") + ")"+" (" + row("avg_vote") + ")"+ " (" + row("duration") + ")")
           })
+          println()
+          println("Highest duration movie title: "+matchingRows.sortBy(_("duration").toDouble).reverse(0).get("title"))
         } else {
           println("No movie titles in " + lang + " with rating greater than " + minmVote + " were found.")
         }
