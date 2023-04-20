@@ -94,7 +94,7 @@ object Assignment extends App {
   searchByLanguageDurationAndVotes("English", 8.5, dataRows)
   println()
   println("Answer 5***********************************************************")
-  searchByLanguageAndBudgetRange("English", 15000, 20000, dataRows)
+  searchByLanguageAndBudgetRange( 15000, 20000, dataRows)
 
   def searchByDirectorAndYearRange(director: String, startYear: Int, endYear: Int, dataRows: Option[List[Map[String, String]]]): Unit = {
 
@@ -125,7 +125,7 @@ object Assignment extends App {
             println(row("title") + " (" + row("year") + ")")
           })
         } else {
-          println("No titles directed by " + director + " in the year range of" + startYear + " to " + endYear + " were found.")
+          println("No titles directed by " + director + " in the year range of " + startYear + " to " + endYear + " were found.")
         }
 
       case None => println("Error: Data is missing.")
@@ -155,7 +155,7 @@ object Assignment extends App {
 
         // Print the matching rows as a report
         if (matchingRows.nonEmpty) {
-          println("Titles in " + lang + " with avg_rating greater than " + userReview + "in descending order:")
+          println("Titles in " + lang + " with avg_rating greater than " + userReview + " in descending order:")
           println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
           matchingRows.sortBy(_("avg_vote").toDouble).reverse.foreach(row => {
             println(row("title") + " (" + row("avg_vote") + ")")
@@ -208,7 +208,7 @@ object Assignment extends App {
     }
 
   }
-  def searchByLanguageAndBudgetRange(lang: String, startBudget: Int, endBudget: Int, dataRows: Option[List[Map[String, String]]]): Unit = {
+  def searchByLanguageAndBudgetRange( startBudget: Int, endBudget: Int, dataRows: Option[List[Map[String, String]]]): Unit = {
 
     dataRows match {
       case Some(rows) =>
@@ -235,13 +235,13 @@ object Assignment extends App {
           println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
          matchingRows.groupBy(_("language"))
             .foreach(row => {
-              println("Language: " + row._1 +" and No. of movie titles: "+ row._2.size)
+              println("Language: " + row._1 +" :: No. of movie titles: "+ row._2.size)
 //            println(row("language") ++" (" + row("title") + ")" + " (" + row("budget") + ")")
           })
           println()
           println("Total Count:"+matchingRows.size)
         } else {
-          println("No titles in " + lang + " in the budget range " + startBudget + " to " + endBudget + " were found.")
+          println("No titles  in the budget range " + startBudget + " to " + endBudget + " were found.")
         }
 
       case None => println("Error: Data is missing.")
