@@ -94,7 +94,7 @@ object Assignment extends App {
   searchByLanguageDurationAndVotes("English", 8.5, dataRows)
   println()
   println("Answer 5***********************************************************")
-  searchByLanguageAndBudgetRange( 15000, 20000, dataRows)
+  searchByLanguageAndBudgetRange( "USA",15000, 20000, dataRows)
 
   def searchByDirectorAndYearRange(director: String, startYear: Int, endYear: Int, dataRows: Option[List[Map[String, String]]]): Unit = {
 
@@ -208,14 +208,15 @@ object Assignment extends App {
     }
 
   }
-  def searchByLanguageAndBudgetRange( startBudget: Int, endBudget: Int, dataRows: Option[List[Map[String, String]]]): Unit = {
+  def searchByLanguageAndBudgetRange( givenCountry: String, startBudget: Int, endBudget: Int, dataRows: Option[List[Map[String, String]]]): Unit = {
 
     dataRows match {
       case Some(rows) =>
         val matchingRows = rows.filter(row => {
-          val language = row.getOrElse("language", "")
-          val budget = row.getOrElse("budget", "")
-          if (language.nonEmpty) {
+          val country = row.getOrElse("country", "")
+          val language = row.getOrElse("language", "English")
+          val budget = row.getOrElse("budget", "0")
+          if (country.contains(givenCountry)) {
 
             if (budget.nonEmpty) {
 
@@ -231,7 +232,7 @@ object Assignment extends App {
 
         // Print the matching rows as a report
         if (matchingRows.nonEmpty) {
-          println("Titles in the budget range " + startBudget + " to " + endBudget + ":")
+          println("Titles of country:" + givenCountry + " , in the budget range " + startBudget + " to " + endBudget + ":")
           println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
          matchingRows.groupBy(_("language"))
             .foreach(row => {
